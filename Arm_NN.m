@@ -50,22 +50,7 @@ for i = 1:Ncontrols
    controls_all(i,1) = cell(currentMuscle.getName());
 end
 
-%-----------------------------------------------------------------------------
-% Now, read in the states file and the controls file that will serve as the
-% intial guess. Then, interpolate the states and controls onto the temporal
-% grid (dc_time). Finally, the entire inital guess must be packaged in a long
-% column vector X0
-% 
-% In the Tug of War example, the states are:
-%   blockToGround_coord_0	
-%   blockToGround_coord_0_u	
-%   muscle1.activation	
-%   muscle1.fiber_length	
-%   muscle2.activation	
-%   muscle2.fiber_length
-%-----------------------------------------------------------------------------
 
-% Load the .sto file that contain the initial guess for the states
 
 [file_input, pathname] = uigetfile({'*.sto', 'OpenSim States Files (*.sto)'}, ...
                          'Select the initial states file','MultiSelect', 'off');
@@ -194,7 +179,7 @@ for i = 1:Ncontrols,
     X_controls_opt(:,i) = z(Nstates*N + N*(i-1)+1:Nstates*N + N*i,1);
 end
 
-% Create data structure for the states file
+% Create data structure for the states error file
 
 StatesData = struct();
 StatesData.name = [char(osimModel.getName()), 'error_state', char(date)];
@@ -210,7 +195,7 @@ end
 StatesData.data = [dc_time, X_state_opt];
 writeOpenSimStatesFile(StatesData)
 
-% Create data structure for the controls file
+% Create data structure for the controls error file
 
 ControlData = struct();
 ControlData.name = [char(osimModel.getName()), 'error_control', char(date)];
